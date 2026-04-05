@@ -28,7 +28,7 @@ sys.path.insert(0, DELHI_DIR)
 
 from routing_engine import get_graph, _graph
 
-app = Flask(__name__, static_folder="../frontend", static_url_path="")
+app = Flask(__name__)
 CORS(app)
 
 # Background Thread for Loading the Graph Safely
@@ -47,7 +47,11 @@ threading.Thread(target=trigger_background_load, daemon=True).start()
 
 @app.route("/")
 def index():
-    return send_from_directory(app.static_folder, "index.html")
+    return jsonify({
+        "status": "online",
+        "message": "Fear-Free Night Navigator API Backend is running!",
+        "graph_loaded": _graph._loaded
+    })
 
 
 @app.route("/api/route")
