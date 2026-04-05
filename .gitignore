@@ -1,0 +1,73 @@
+# ═══════════════════════════════════════════════════════
+#  Fear-Free Night Navigator — .gitignore
+# ═══════════════════════════════════════════════════════
+
+# ── Python ────────────────────────────────────────────
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── Large Data Files (regenerate via pipeline) ────────
+# Commented out so they upload to GitHub/Render for server initialization
+# delhi/data/delhi_osm_raw.gpkg
+# delhi/data/delhi_road_segments.gpkg
+# delhi/data/delhi_road_segments.csv
+# delhi/data/delhi_road_segments_backup.csv
+# delhi/data/delhi_scored_roads.csv
+# delhi/data/delhi_scored_roads.geojson
+
+
+
+# ── Training Data (regenerate via generate_delhi_dataset_v2.py) ──
+training/data/
+!training/data/.gitkeep
+
+# ── Runtime / User Data ──────────────────────────────
+delhi/data/user_feedback.json
+
+# ── Colab / Jupyter ──────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── OS Files ─────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.swp
+*~
+*.bak
+
+# ── IDE ──────────────────────────────────────────────
+.idea/
+.vscode/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# ── Misc / Build Artifacts ───────────────────────────
+*.log
+*.tmp
+output/
+*.docx
+initialsummary.txt
+_fill_template.py
+Research References:.md.md
+aa.docx
+The Big Code 2026_Problem Statement & Solution Template.docx
+
+# ── Workspace / Editor Config ────────────────────────
+*.code-workspace
