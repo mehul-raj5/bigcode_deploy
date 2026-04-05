@@ -30,10 +30,8 @@ from routing_engine import get_graph
 app = Flask(__name__, static_folder="../frontend", static_url_path="")
 CORS(app)
 
-# Pre-load the graph at startup
-print("Pre-loading routing graph...")
-graph = get_graph()
-print("Graph loaded.")
+# We no longer pre-load the graph at startup to ensure Gunicorn binds the port quickly
+# graph = get_graph()
 
 
 # =====================================================================
@@ -91,6 +89,7 @@ def compute_route():
         if tier not in ("fastest", "balanced", "safest", "safe_short", "pure_safety"):
             return jsonify({"error": f"Invalid tier: {tier}"}), 400
 
+        graph = get_graph()
         result = graph.route(
             start_lat, start_lon,
             end_lat, end_lon,
@@ -140,6 +139,7 @@ def safety_heatmap():
 @app.route("/api/bounds")
 def map_bounds():
     """Return the bounding box of the Delhi network."""
+    graph = get_graph()
     coords = list(graph.node_coords.values())
     lats = [c[0] for c in coords]
     lons = [c[1] for c in coords]
@@ -248,4 +248,4 @@ def get_feedback():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5050, debug=False)
+    app.run(host="0.0.0.0", port=10000, debug=False)
