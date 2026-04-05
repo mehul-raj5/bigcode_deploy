@@ -15,6 +15,7 @@ import os
 import sys
 import json
 import time
+import threading
 import numpy as np
 import pandas as pd
 from flask import Flask, request, jsonify, send_from_directory
@@ -25,13 +26,19 @@ from collections import defaultdict
 DELHI_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, DELHI_DIR)
 
-from routing_engine import get_graph
+from routing_engine import get_graph, _graph
 
 app = Flask(__name__, static_folder="../frontend", static_url_path="")
 CORS(app)
 
-# We no longer pre-load the graph at startup to ensure Gunicorn binds the port quickly
-# graph = get_graph()
+# Background Thread for Loading the Graph Safely
+def trigger_background_load():
+    print("Background thread started. Loading the massive road graph...")
+    get_graph()
+    print("Graph fully loaded and ready to serve!")
+
+# Start the thread immediately so Gunicorn doesn't block while binding the port
+threading.Thread(target=trigger_background_load, daemon=True).start()
 
 
 # =====================================================================
@@ -89,6 +96,9 @@ def compute_route():
         if tier not in ("fastest", "balanced", "safest", "safe_short", "pure_safety"):
             return jsonify({"error": f"Invalid tier: {tier}"}), 400
 
+        if not _graph._loaded:
+            return jsonify({"error": "Server is still warming up and loading the massive road network into memory. Please try again in 30 seconds."}), 503
+
         graph = get_graph()
         result = graph.route(
             start_lat, start_lon,
@@ -139,6 +149,9 @@ def safety_heatmap():
 @app.route("/api/bounds")
 def map_bounds():
     """Return the bounding box of the Delhi network."""
+    if not _graph._loaded:
+        return jsonify({"error": "Graph still loading"}), 503
+
     graph = get_graph()
     coords = list(graph.node_coords.values())
     lats = [c[0] for c in coords]
