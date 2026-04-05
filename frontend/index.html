@@ -828,7 +828,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Get your own key: https://console.cloud.google.com/apis/credentials
          Enable "Maps JavaScript API" + "Places API" -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=__GOOGLE_MAPS_API_KEY__&libraries=places"></script>
     <script>
       // ══════════════════════════════════════════
       //  State
@@ -881,7 +881,7 @@
         map.on("click", onMapClick);
 
         // Use absolute URL if backend is hosted elsewhere, else default to empty string for relative paths
-        const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhost:5050" : "https://YOUR_RENDER_APP_URL.onrender.com";
+        const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhost:5050" : "https://fear-free-backend.onrender.com";
 
         // Fit to Delhi bounds
         fetch(`${API_BASE_URL}/api/bounds`)
